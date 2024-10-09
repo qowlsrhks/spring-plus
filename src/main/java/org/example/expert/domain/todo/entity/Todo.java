@@ -22,6 +22,7 @@ public class Todo extends Timestamped {
     private String title;
     private String contents;
     private String weather;
+    private String nickname;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,10 +34,11 @@ public class Todo extends Timestamped {
     @OneToMany(mappedBy = "todo")
     private List<Manager> managers = new ArrayList<>();
 
-    public Todo(String title, String contents, String weather, User user) {
+    public Todo(String title, String contents, String weather,String nickname, User user) {
         this.title = title;
         this.contents = contents;
         this.weather = weather;
+        this.nickname = nickname;
         this.user = user;
         this.managers.add(new Manager(user, this));
     }

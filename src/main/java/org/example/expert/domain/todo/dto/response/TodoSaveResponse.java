@@ -10,13 +10,15 @@ public class TodoSaveResponse {
     private final String title;
     private final String contents;
     private final String weather;
+    private final String nickname;
     private final UserResponse user;
 
-    public TodoSaveResponse(Long id, String title, String contents, String weather, UserResponse user) {
+    public TodoSaveResponse(Long id, String title, String contents, String weather,String nickname, UserResponse user) {
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.weather = weather;
+        this.nickname = nickname;
         this.user = user;
     }
 }

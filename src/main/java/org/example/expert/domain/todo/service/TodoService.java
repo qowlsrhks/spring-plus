@@ -33,6 +33,7 @@ public class TodoService {
         Todo newTodo = new Todo(
                 todoSaveRequest.getTitle(),
                 todoSaveRequest.getContents(),
+                todoSaveRequest.getNickname(),
                 weather,
                 user
         );
@@ -42,6 +43,7 @@ public class TodoService {
                 savedTodo.getId(),
                 savedTodo.getTitle(),
                 savedTodo.getContents(),
+                savedTodo.getNickname(),
                 weather,
                 new UserResponse(user.getId(), user.getEmail())
         );
@@ -57,6 +59,7 @@ public class TodoService {
                 todo.getTitle(),
                 todo.getContents(),
                 todo.getWeather(),
+                todo.getNickname(),
                 new UserResponse(todo.getUser().getId(), todo.getUser().getEmail()),
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
@@ -74,6 +77,7 @@ public class TodoService {
                 todo.getTitle(),
                 todo.getContents(),
                 todo.getWeather(),
+                todo.getNickname(),
                 new UserResponse(user.getId(), user.getEmail()),
                 todo.getCreatedAt(),
                 todo.getModifiedAt()

@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -15,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import static org.example.expert.domain.QTodo.todo;
+import static org.example.expert.domain.QUser.user;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -26,6 +30,7 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
     private final WeatherClient weatherClient;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public TodoSaveResponse saveTodo(AuthUser authUser, TodoSaveRequest todoSaveRequest) {
         User user = User.fromAuthUser(authUser);
@@ -69,20 +74,27 @@ public class TodoService {
     }
 
     public TodoResponse getTodo(long todoId) {
-        Todo todo = todoRepository.findByIdWithUser(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        Todo foundTodo = jpaQueryFactory
+                .selectFrom(todo)
+                .join(todo.user, user)
+                .where(todo.id.eq(todoId))
+                .fetchOne();
 
-        User user = todo.getUser();
+        if (foundTodo == null) {
+            throw new InvalidRequestException("Todo not found");
+        }
+
+        User foundUser = foucndTodo.getUser();
 
         return new TodoResponse(
-                todo.getId(),
-                todo.getTitle(),
-                todo.getContents(),
-                todo.getWeather(),
-                todo.getNickname(),
-                new UserResponse(user.getId(), user.getEmail()),
-                todo.getCreatedAt(),
-                todo.getModifiedAt()
+                foundTodo.getId(),
+                foundTodo.getTitle(),
+                foundTodo.getContents(),
+                foundTodo.getWeather(),
+                foundTodo.getNickname(),
+                new UserResponse(foundUser.getId(), foundUser.getEmail()),
+                foundTodo.getCreatedAt(),
+                foundTodo.getModifiedAt()
         );
     }
 }

@@ -61,13 +61,6 @@ tasks.named('test') {
 clean {
     delete file('src/main/generated')
 }
-sourceSets {
-    main {
-        java {
-            srcDirs += 'build/generated/source/apt/main'
-        }
-    }
-}
 
 tasks.withType(JavaCompile) {
     options.annotationProcessorPath = configurations.annotationProcessor
